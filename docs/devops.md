@@ -31,15 +31,18 @@ The `Jenkinsfile` defines these stages:
 3. Install project dependencies.
 4. Validate Python source files with `compileall`.
 5. Build the Docker image.
-6. Optionally push the image to Docker Hub when Docker credentials are configured.
+6. Push the image to Docker Hub using Jenkins credentials.
 
 Expected Jenkins setup:
 
 - Jenkins server with Git, Python 3.14, and Docker installed.
 - Pipeline job connected to the GitHub repository.
-- Optional environment variables for Docker Hub publishing:
-  - `DOCKERHUB_USERNAME`
-  - `DOCKERHUB_TOKEN`
+- Jenkins username/password credential for Docker Hub:
+  - **ID**: `DOCKERHUB_CREDENTIALS`
+  - **Username**: Docker Hub username, for example `priyanshuksharma`
+  - **Password**: Docker Hub password or access token
+
+The pipeline reads this credential with Jenkins `withCredentials`, so the Docker Hub password is not stored in code or printed in logs.
 
 ## GitHub Actions
 
