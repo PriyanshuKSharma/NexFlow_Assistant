@@ -28,13 +28,6 @@ pipeline {
             }
         }
 
-        stage('Build React Frontend') {
-            steps {
-                sh 'cd frontend && npm install'
-                sh 'cd frontend && npm run build'
-            }
-        }
-
         stage('Build Docker Images') {
             steps {
                 sh 'docker build -t ${BACKEND_IMAGE_NAME}:${IMAGE_TAG} -t ${BACKEND_IMAGE_NAME}:latest .'
