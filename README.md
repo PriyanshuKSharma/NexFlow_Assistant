@@ -151,6 +151,26 @@ docker build -t nexflow-backend .
 docker build -t nexflow-frontend ./frontend
 ```
 
+## Vercel Deployment
+
+Deploy the React frontend on Vercel:
+
+```text
+Root Directory: frontend
+Framework Preset: Vite
+Build Command: npm run build
+Output Directory: dist
+Install Command: npm install
+```
+
+Set this Vercel environment variable:
+
+```env
+VITE_API_URL=https://your-backend-api-url
+```
+
+The FastAPI backend should be deployed separately on a persistent backend host because the app stores users and leads in SQLite. See `docs/vercel.md` for the full Vercel checklist.
+
 ## DevOps / CI-CD Support
 
 This repository includes:
@@ -161,6 +181,7 @@ This repository includes:
 - `Jenkinsfile`: Validates code, builds frontend, builds Docker images, and pushes to Docker Hub.
 - `.github/workflows/ci.yml`: Runs backend validation, frontend build, and Docker image builds.
 - `docs/devops.md`: Documents Docker, Jenkins, and GitHub integration.
+- `docs/vercel.md`: Documents Vercel frontend deployment.
 
 ## Jenkins Notes
 
