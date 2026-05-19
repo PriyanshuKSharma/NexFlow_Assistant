@@ -44,6 +44,7 @@ export default function App() {
         title={theme === "dark" ? "Light theme" : "Black theme"}
       >
         {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+        <span>{theme === "dark" ? "Light theme" : "Black theme"}</span>
       </button>
 
       <Routes>
