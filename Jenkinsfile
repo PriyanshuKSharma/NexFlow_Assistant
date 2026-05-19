@@ -2,7 +2,8 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = 'nexflow-assistant'
+        BACKEND_IMAGE_NAME = 'nexflow-backend'
+        FRONTEND_IMAGE_NAME = 'nexflow-frontend'
         IMAGE_TAG = "${env.BUILD_NUMBER}"
     }
 
@@ -23,17 +24,25 @@ pipeline {
 
         stage('Code Validation') {
             steps {
-                sh '. .venv/bin/activate && python -m compileall app.py ai_assistant.py automation.py database.py'
+                sh '. .venv/bin/activate && python -m compileall backend app.py ai_assistant.py automation.py database.py'
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Build React Frontend') {
             steps {
-                sh 'docker build -t ${IMAGE_NAME}:${IMAGE_TAG} -t ${IMAGE_NAME}:latest .'
+                sh 'cd frontend && npm install'
+                sh 'cd frontend && npm run build'
             }
         }
 
-        stage('Optional Docker Push') {
+        stage('Build Docker Images') {
+            steps {
+                sh 'docker build -t ${BACKEND_IMAGE_NAME}:${IMAGE_TAG} -t ${BACKEND_IMAGE_NAME}:latest .'
+                sh 'docker build -t ${FRONTEND_IMAGE_NAME}:${IMAGE_TAG} -t ${FRONTEND_IMAGE_NAME}:latest ./frontend'
+            }
+        }
+
+        stage('Docker Push') {
             steps {
                 withCredentials([usernamePassword(
                     credentialsId: 'DOCKERHUB_CREDENTIALS',
@@ -41,10 +50,14 @@ pipeline {
                     passwordVariable: 'DOCKERHUB_PASSWORD'
                 )]) {
                     sh 'echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin'
-                    sh 'docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${DOCKERHUB_USERNAME}/${IMAGE_NAME}:${IMAGE_TAG}'
-                    sh 'docker tag ${IMAGE_NAME}:latest ${DOCKERHUB_USERNAME}/${IMAGE_NAME}:latest'
-                    sh 'docker push ${DOCKERHUB_USERNAME}/${IMAGE_NAME}:${IMAGE_TAG}'
-                    sh 'docker push ${DOCKERHUB_USERNAME}/${IMAGE_NAME}:latest'
+                    sh 'docker tag ${BACKEND_IMAGE_NAME}:${IMAGE_TAG} ${DOCKERHUB_USERNAME}/${BACKEND_IMAGE_NAME}:${IMAGE_TAG}'
+                    sh 'docker tag ${BACKEND_IMAGE_NAME}:latest ${DOCKERHUB_USERNAME}/${BACKEND_IMAGE_NAME}:latest'
+                    sh 'docker tag ${FRONTEND_IMAGE_NAME}:${IMAGE_TAG} ${DOCKERHUB_USERNAME}/${FRONTEND_IMAGE_NAME}:${IMAGE_TAG}'
+                    sh 'docker tag ${FRONTEND_IMAGE_NAME}:latest ${DOCKERHUB_USERNAME}/${FRONTEND_IMAGE_NAME}:latest'
+                    sh 'docker push ${DOCKERHUB_USERNAME}/${BACKEND_IMAGE_NAME}:${IMAGE_TAG}'
+                    sh 'docker push ${DOCKERHUB_USERNAME}/${BACKEND_IMAGE_NAME}:latest'
+                    sh 'docker push ${DOCKERHUB_USERNAME}/${FRONTEND_IMAGE_NAME}:${IMAGE_TAG}'
+                    sh 'docker push ${DOCKERHUB_USERNAME}/${FRONTEND_IMAGE_NAME}:latest'
                 }
             }
         }
