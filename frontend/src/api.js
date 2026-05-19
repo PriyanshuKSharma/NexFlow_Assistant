@@ -1,4 +1,5 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+const isProd = import.meta.env.PROD;
+const API_BASE_URL = import.meta.env.VITE_API_URL || (isProd ? "/api" : "http://localhost:8000");
 
 export function getStoredAuth() {
   const raw = localStorage.getItem("nexflow_auth");
