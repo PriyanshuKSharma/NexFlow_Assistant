@@ -18,6 +18,8 @@ export async function apiRequest(path, options = {}) {
   const auth = getStoredAuth();
   const headers = {
     "Content-Type": "application/json",
+    "bypass-tunnel-warning": "true",
+    "Bypass-Tunnel-Reminder": "true",
     ...(options.headers || {}),
   };
 
