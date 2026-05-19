@@ -113,7 +113,7 @@ This repository includes:
 
 - `Dockerfile`: Builds a production-ready Streamlit container image.
 - `.dockerignore`: Keeps secrets, local databases, caches, and virtual environments out of the Docker build context.
-- `Jenkinsfile`: Defines a Jenkins pipeline for checkout, dependency installation, code validation, Docker build, and optional Docker Hub push.
+- `Jenkinsfile`: Defines a Jenkins pipeline for checkout, dependency installation, code validation, Docker build, and Docker Hub push using Jenkins credentials.
 - `.github/workflows/ci.yml`: Runs GitHub Actions checks on push and pull request.
 - `docs/devops.md`: Explains the Docker, Jenkins, GitHub Actions, and deployment workflow.
 
@@ -124,7 +124,7 @@ This repository includes:
 3. Install dependencies from `requirements.txt`.
 4. Validate source files using `python -m compileall`.
 5. Build a Docker image.
-6. Optionally push the image to Docker Hub using `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN`.
+6. Push the image to Docker Hub using the Jenkins credential ID `DOCKERHUB_CREDENTIALS`.
 
 ### GitHub Actions Workflow
 
