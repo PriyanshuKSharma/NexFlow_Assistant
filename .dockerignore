@@ -1,0 +1,17 @@
+.git
+.github
+__pycache__/
+*.py[cod]
+*.log
+.env
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.db
+nexflow_data.db
+docs/
+README.md
+Jenkinsfile
