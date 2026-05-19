@@ -7,12 +7,13 @@ load_dotenv()
 
 # Configure Gemini API
 API_KEY = os.getenv("GEMINI_API_KEY")
+MODEL_NAME = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
 
 if API_KEY:
     genai.configure(api_key=API_KEY)
     
     # Initialize the model
-    # Using gemini-1.5-flash as it is fast and efficient for conversational tasks
+    # Gemini model can be changed from .env with GEMINI_MODEL.
     generation_config = {
         "temperature": 0.7,
         "top_p": 0.95,
@@ -20,7 +21,7 @@ if API_KEY:
         "max_output_tokens": 1024,
     }
     model = genai.GenerativeModel(
-        model_name="gemini-1.5-flash",
+        model_name=MODEL_NAME,
         generation_config=generation_config,
         system_instruction="You are an AI-Powered Business Automation Assistant for a company called NexFlow. You are helpful, professional, and knowledgeable about business automation, software development, and course offerings. Keep your answers concise, informative, and polite."
     )
@@ -42,4 +43,11 @@ def get_ai_response(user_message, chat_history=None):
         response = model.generate_content(user_message)
         return response.text
     except Exception as e:
+        error_message = str(e)
+        if "not found" in error_message and "models/" in error_message:
+            return (
+                "Sorry, the configured Gemini model is not available for this API key. "
+                f"Set `GEMINI_MODEL=gemini-2.5-flash` in your `.env` file and restart the app. "
+                f"Current model: `{MODEL_NAME}`."
+            )
         return f"Sorry, I encountered an error while processing your request: {e}"
