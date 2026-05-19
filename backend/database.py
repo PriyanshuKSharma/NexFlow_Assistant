@@ -3,7 +3,10 @@ from datetime import datetime
 import os
 from pathlib import Path
 
-DB_PATH = Path(os.getenv("DATABASE_PATH", Path(__file__).resolve().parent.parent / "nexflow_data.db"))
+if os.getenv("VERCEL") or os.getenv("VERCEL_ENV"):
+    DB_PATH = Path("/tmp/nexflow_data.db")
+else:
+    DB_PATH = Path(os.getenv("DATABASE_PATH", Path(__file__).resolve().parent.parent / "nexflow_data.db"))
 
 
 def get_connection():
