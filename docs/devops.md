@@ -38,13 +38,13 @@ The `Jenkinsfile` defines these stages:
 2. Create a Python virtual environment.
 3. Install backend dependencies.
 4. Validate Python source files with `compileall`.
-5. Install and build the React frontend.
-6. Build backend and frontend Docker images.
-7. Push both images to Docker Hub using Jenkins credentials.
+5. Build backend and frontend Docker images.
+6. Push both images to Docker Hub using Jenkins credentials.
 
 Expected Jenkins setup:
 
-- Jenkins server/agent with Git, Docker, Python 3.14, Node.js 22, and npm installed.
+- Jenkins server/agent with Git, Docker, and Python 3.14 installed.
+- Node.js is not required on Jenkins because the frontend Docker image builds React inside `node:22-alpine`.
 - Pipeline job connected to the GitHub repository.
 - Jenkins username/password credential for Docker Hub:
   - **ID**: `DOCKERHUB_CREDENTIALS`
@@ -59,7 +59,7 @@ The `.github/workflows/ci.yml` workflow runs on pushes and pull requests. It:
 
 - Installs backend dependencies on Python 3.14.
 - Compiles the backend and legacy Streamlit source files.
-- Installs and builds the React frontend on Node.js 22.
+- Installs and builds the React frontend on Node.js 22 in GitHub-hosted CI.
 - Builds backend and frontend Docker images.
 
 This gives every GitHub commit a basic quality gate before deployment.
