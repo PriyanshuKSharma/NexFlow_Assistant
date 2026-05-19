@@ -166,7 +166,8 @@ This repository includes:
 
 Required Jenkins setup:
 
-- Git, Docker, Python 3.14, Node.js 22, and npm installed on the Jenkins agent.
+- Git, Docker, and Python 3.14 installed on the Jenkins agent.
+- Node.js is not required on Jenkins because the frontend Dockerfile builds React inside `node:22-alpine`.
 - Docker Hub username/password credential:
   - **ID**: `DOCKERHUB_CREDENTIALS`
   - **Username**: Docker Hub username, for example `priyanshuksharma`
