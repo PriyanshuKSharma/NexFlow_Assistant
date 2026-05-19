@@ -1,3 +1,4 @@
+# pyrefly: ignore [missing-import]
 import streamlit as st
 import pandas as pd
 from database import init_db, insert_lead, get_all_leads
