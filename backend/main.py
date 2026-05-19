@@ -10,7 +10,6 @@ app = FastAPI(
     title="NexFlow Assistant API",
     description="FastAPI backend for AI chat, JWT auth, lead capture, and admin dashboard.",
     version="2.0.0",
-    root_path="/api",
 )
 
 cors_origins = [
