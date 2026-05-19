@@ -1,13 +1,29 @@
+# pyrefly: ignore [missing-import]
 import os
 import google.generativeai as genai
 from dotenv import load_dotenv
+
+import streamlit as st
 
 # Load environment variables
 load_dotenv()
 
 # Configure Gemini API
+# Attempt to get API key from environment first, then from Streamlit Secrets
 API_KEY = os.getenv("GEMINI_API_KEY")
-MODEL_NAME = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+if not API_KEY:
+    try:
+        API_KEY = st.secrets["GEMINI_API_KEY"]
+    except (FileNotFoundError, KeyError, Exception):
+        API_KEY = None
+
+MODEL_NAME = os.getenv("GEMINI_MODEL")
+if not MODEL_NAME:
+    try:
+        MODEL_NAME = st.secrets.get("GEMINI_MODEL", "gemini-2.5-flash")
+    except (FileNotFoundError, KeyError, Exception):
+        MODEL_NAME = "gemini-2.5-flash"
+
 
 if API_KEY:
     genai.configure(api_key=API_KEY)
